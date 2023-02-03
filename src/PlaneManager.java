@@ -1,10 +1,33 @@
+/** 
+ * @author Dylan DEA
+ * @since 03/02/2023
+   * Ce programme permet de gérer les avions rentrant actuellement dans le PLM.
+   * Il permet de:
+   * -les afficher avec uniquement <b>le nom</b> des pièces commandées
+   * -les afficher avec le <b>détail</b> des pièces commandées (<b>nom+prix+catégorie</b> de la pièce)
+   * -<b>ajouter</b> de nouvelles pièces à la commande et <b>supprimer</b> les pièces en cours de commande
+   */
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
+/** 
+ * class PlaneManager
+ */
 public class PlaneManager {
 
+	/** 
+	   * Entrée du programme.
+	   * @param args Le programme ne requiert pas d'arguments en ligne de commande.
+	   * Les données sont fournies en dur au début du main.
+	   * On utilise deux hashmap différentes :
+	   * -une pour les avions (ID de l'avion + infos de l'avion)
+	   * -une pour les pièces (ID de l'avion + un tableau de pièces)
+	   * Ces deux hashmap possedent donc les mêmes clés, ce qui permet de faire le lien entre les deux.
+	   */
 	public static void main(String[] args) {
 
 		//----------DATA----------:
@@ -89,6 +112,13 @@ public class PlaneManager {
 		System.exit(0);
 	}
 
+	
+	/** 
+	   * Permet d'afficher les avions + les noms des pièces
+	     * @param planeList liste des avions classés par ID de l'avion
+	   * @param partsList liste des pièces classés par l'ID de avion
+	   * @return retourne une string qui sera ensuite affichée dans la console ou ailleurs
+	   */
 	public static String displayPlaneList(HashMap<String, String[]>  planeList, HashMap<String, ArrayList<String[]>> partsList) {
 		if (planeList.size() == 0) {
 			return "";
@@ -110,6 +140,14 @@ public class PlaneManager {
 		}
 	}
 
+	
+	/** 
+	   * Permet d'afficher les avions + le détail des pièces (nom+catégorie+prix)
+	   * @param planeList liste des avions classés par ID de l'avion
+	   * @param partsList liste des pièces classés par l'ID de avion
+	   * @param scan On lui fait passer le scanner initialisé dans le main
+	   * @return retourne une string qui sera ensuite affichée dans la console ou ailleurs
+	   */
 	public static String displayDetailed(HashMap<String, String[]>  planeList, HashMap<String, ArrayList<String[]>> partsList, Scanner scan) {
 		String formattedPlaneDetail = "";
 
@@ -133,6 +171,12 @@ public class PlaneManager {
 		return formattedPlaneDetail;
 	}
 
+	/** 
+	   * Permet d'afficher les avions + les noms des pièces
+	    * @param planeList liste des avions classés par ID de l'avion
+	    * @param scan On lui fait passer le scanner initialisé dans le main
+	   * @return retourne un Hashmap qui contient uniquement les avions répondant au critère de recherche, le fait de retourner un hashmap permet de le passer ensuite directement dans la méthode displayPlaneList()
+	   */
 	public static HashMap<String, String[]> searchInPlaneList(HashMap<String, String[]> planeList, Scanner scan) {
 		HashMap<String, String[]> resultSearch = new HashMap<>();
 		System.out.println("Saisissez le programme à rechercher :");
@@ -158,7 +202,15 @@ public class PlaneManager {
 
 		return resultSearch;
 	}
-	// changer scan ID par des chiffres ?
+	
+	/** 
+	   * Lorsqu'on veut afficher ou agir sur un avion donné, cette méthode offre plusieurs façons de sélectionner un avion.
+	   * @param planeList liste des avions classés par ID de l'avion
+	   * @param partsList liste des pièces classés par l'ID de avion
+	   * @param availableParts Catalogue de pièces disponibles à la commande.
+	   * @param scan On lui fait passer le scanner initialisé dans le main
+	   * Mériterait d'être dans une nouvelle classe ?
+	   */
 	public static void orderParts(HashMap<String, ArrayList<String[]>> partsList, HashMap<String, String[]> planeList, Scanner scan, String[][] availableParts) {
 		System.out.println("Bienvenue dans le service de commande de pièces.");
 		System.out.println("Séléction de l'avion concerné par la commande:");
@@ -303,6 +355,14 @@ public class PlaneManager {
 		return;	
 	}
 
+	
+	/** 
+	   * Lorsqu'on veut afficher ou agir sur un avion donné, cette méthode offre plusieurs façons de sélectionner un avion.
+	   * @param scan On lui fait passer le scanner initialisé dans le main
+	   * @param planeList liste des avions classés par ID de l'avion
+	   * @param partsList liste des pièces classés par l'ID de avion
+	   * @return retourne l'ID de l'avion sélectionné
+	   */
 	public static String planeSelection(Scanner scan, HashMap<String, String[]> planeList, HashMap<String, ArrayList<String[]>> partsList) {
 		System.out.println("1 - Choisir dans la liste des avions disponibles");
 		System.out.println("2 - Rechercher un avion par son programme");
@@ -357,6 +417,14 @@ public class PlaneManager {
 		return choosenPlaneID;
 	}
 	
+	
+	/** 
+	   * Gestion saisies inattendues quand on attend un <b>chiffre entier dans une plage précise</b>
+	   * @param scan On lui fait passer le scanner initialisé dans le main
+	   * @param rangeMin = la valeur minimum de la plage désirée
+	   * @param rangeMax = la valeur maximum de la plage désirée
+	   * @return retourne l'entier saisi après avoir vérifié qu'il est correct et n'est pas une lettre ou autre, retourne cet entier
+	   */
 	public static int handleUnexpectedInputForIntegerInARange(int rangeMin, int rangeMax, Scanner scan) {
 		//Gestion saisies inattendues quand on attend un CHIFFRE ENTIER dans une plage précise:				
 		//une première gestion pour les lettres:
